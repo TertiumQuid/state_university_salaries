@@ -7,13 +7,13 @@ require 'securerandom'
 module SUS
   class CLI < Thor
     desc "request", "Public records request."
-    method_option :output, :type => :string, :required => true, :aliases => "-o", :desc => "Output directory for sqlite databases."
+    method_option :output, :type => :string, :required => true, :aliases => "-o", :desc => "Output filename for sqlite database."
     def request
-      puts "requesting salary data"
+      puts "requesting salary data > #{options.output}"
       
-      client = SUS::Client.new options.output
-      puts client.run
-      send(state).gzip_output options.output
+      SUS::Database.new.create options.output
+      client = SUS::Client.new
+      puts client.run options.output
     end
 
     desc "version", "Print version number."

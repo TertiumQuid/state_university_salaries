@@ -3,13 +3,13 @@ require "state_university_salaries/version"
 
 Gem::Specification.new do |gem|
   gem.name    = "state_university_salaries"
-  gem.version = LDA::VERSION
+  gem.version = SUS::VERSION
 
   gem.author      = ["Travis Dunn", "Farhood Basiri", "John Long"]
   gem.email       = ["info@bellwethersystems.com"]
   gem.homepage    = "http://www.bellwethersystems.com/"
   gem.summary     = "CLI to scrape salary data."
-  gem.description = "CLI tool for scraping florida state universities data."
+  gem.description = "CLI tool for scraping florida state university employee salary data."
   gem.license     = "Proprietary"
   gem.post_install_message = <<-MESSAGE
  !    The `State University Salaries` gem gathers data from government websites and dumps the output 
@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   MESSAGE
 
   gem.files       = `git ls-files`.split("\n").select { |d| d =~ %r{^(License|README|bin/|data/|ext/|lib/|spec/|test/)} }
-  gem.executables = "lda"
+  gem.executables = "sus"
   gem.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   gem.add_dependency "thor"

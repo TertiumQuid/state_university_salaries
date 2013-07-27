@@ -1,11 +1,11 @@
-Lobbying Disclosure Act
+State University Salaries
 =======================
 
-CLI Tool for scraping legislative data around the US Lobbying Disclosure Act and other public records sources.
+CLI tool for scraping florida state university employee salary data.
 
 #### Setup
 
-LDA is distributed as a ruby gem and can be installed on your system from github:
+SUS is distributed as a ruby gem and can be installed on your system from github:
 
     git clone git://github.com/TertiumQuid/state_university_salaries.git
     cd state_university_salaries
@@ -14,6 +14,6 @@ LDA is distributed as a ruby gem and can be installed on your system from github
 
 #### Usage
 
-After installation the `lda` command should be available in your ruby gems binary path.  
+After installation the `sus` command should be available in your ruby gems binary path.  
 
-    lda request -s=tx -o=~/Desktop/
+    sus request -o=~/Desktop/flsalaries.sqlite
