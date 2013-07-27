@@ -27,7 +27,7 @@ module SUS
   	  end
 
   	  def drop
-  	  	Course.delete_all
+  	  	Title.delete_all
   	  	Payment.delete_all
   	  	Person.delete_all
   	  	Program.delete_all
@@ -56,16 +56,20 @@ module SUS
     		ActiveRecord::Migration.add_index :people, :school_id
 
     		ActiveRecord::Migration.create_table :payments do |t|
+          t.references :school
   	      t.references :person
   	      t.references :program
-  	      t.references :course
+  	      t.references :title
   	      t.string :employee_type
   	      t.float  :fte
   	      t.float  :rate
     		end
+        ActiveRecord::Migration.add_index :payments, :rate
+        ActiveRecord::Migration.add_index :payments, :school_id
     		ActiveRecord::Migration.add_index :payments, :course_id
     		ActiveRecord::Migration.add_index :payments, :program_id
     		ActiveRecord::Migration.add_index :payments, :person_id
+        ActiveRecord::Migration.add_index :payments, [:school_id, :rate]
 
         ActiveRecord::Migration.create_table :stats do |t|
           t.references :school
@@ -74,6 +78,7 @@ module SUS
           t.float :value
         end
         ActiveRecord::Migration.add_index :stats, :school_id
+        ActiveRecord::Migration.add_index :stats, :title
       end
   end
 end

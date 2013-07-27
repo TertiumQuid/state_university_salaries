@@ -19,11 +19,12 @@ module SUS
       	w.each 1 do |row|
           program = row[6] ? Program.where(name: row[6]).first_or_create : nil
           person = Person.where(last_name: row[1], first_name: row[2], school_id: school.id).first_or_create
-          course = Course.where(name: row[11], code: row[10]).first_or_create
+          title = Title.where(name: row[11], code: row[10]).first_or_create
           
           payment = Payment.where(
           	person_id: person.id, 
           	program_id: program && program.id, 
+          	school_id: school.id, 
           	course_id: course.id 
           ).first_or_initialize
           payment.employee_type = row[4]
@@ -31,11 +32,12 @@ module SUS
           payment.rate = payment.ops? ? row[8] : row[7]
           payment.save
       	end
+      	break
       end
 
       calculate_stats
       
-      # gzip_output options.output
+      gzip_output options.output
 
       puts " ran"
     rescue => e
@@ -43,11 +45,15 @@ module SUS
       puts "---"
       puts e.backtrace
     ensure
-      cleanup
+      # cleanup
     end
 
     def calculate_stats
       Stat.calculate_top_lists
+      Stat.calculate_mean
+      Stat.calculate_median
+      Stat.calculate_funding_sources
+      Stat.calculate_titles
     end
 
     def gzip_output(input)
