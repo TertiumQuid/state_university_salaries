@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'rubygems' unless defined?(Gem)
+
+begin
+  require 'state_university_salaries'
+  SUS::CLI.start(ARGV)
+rescue
+  exit(1)
+end
