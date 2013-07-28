@@ -6,12 +6,10 @@ module SUS
 
     def run(output_file)
       puts " running"
-      # @temp_file = download_temp_file SALARY_SHEETS_URL
-      ss = "/Users/travisdunn/Downloads/SUS_Data.xls"
+      @temp_file = download_temp_file SALARY_SHEETS_URL
+      ss = Spreadsheet.open @temp_file
 
-      @temp_file = Spreadsheet.open ss
-
-      @temp_file.worksheets.each do |w|
+      ss.worksheets.each do |w|
       	next if w.name == 'Coversheet'
       	puts "#{w.name}: #{w.rows.size}"
 
@@ -25,19 +23,19 @@ module SUS
           	person_id: person.id, 
           	program_id: program && program.id, 
           	school_id: school.id, 
-          	course_id: course.id 
+          	title_id: title.id 
           ).first_or_initialize
           payment.employee_type = row[4]
           payment.fte = row[5]
           payment.rate = payment.ops? ? row[8] : row[7]
           payment.save
       	end
-      	break
       end
 
       calculate_stats
       
-      gzip_output options.output
+      puts "  gzipping #{output_file}..."
+      gzip_output output_file
 
       puts " ran"
     rescue => e
@@ -45,14 +43,20 @@ module SUS
       puts "---"
       puts e.backtrace
     ensure
-      # cleanup
+      cleanup
     end
 
     def calculate_stats
+      puts "  calculating stats"
+      puts "    top lists"
       Stat.calculate_top_lists
+      puts "    means"
       Stat.calculate_mean
+      puts "    medians"
       Stat.calculate_median
+      puts "    funding sources"
       Stat.calculate_funding_sources
+      puts "    top class titles"
       Stat.calculate_titles
     end
 
@@ -63,7 +67,7 @@ module SUS
     end
 
     def cleanup
-      @temp_file.unlink unless @temp_file.blank?
+      @temp_file.unlink unless @temp_file.nil?
     end    
 
 	def download_temp_file(url)

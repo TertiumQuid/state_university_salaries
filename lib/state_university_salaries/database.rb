@@ -12,9 +12,6 @@ module SUS
         puts " creating schema..."
         migrate_database_schemas
       end
-
-    rescue Exception => e
-      puts "create database ERROR #{e.message}"
   	end
 
   	private
@@ -27,11 +24,12 @@ module SUS
   	  end
 
   	  def drop
-  	  	Title.delete_all
-  	  	Payment.delete_all
-  	  	Person.delete_all
-  	  	Program.delete_all
-  	  	School.delete_all
+  	  	# Title.delete_all
+  	  	# Payment.delete_all
+  	  	# Person.delete_all
+  	  	# Program.delete_all
+  	  	# School.delete_all
+        Stat.delete_all
   	  end
 
   	  def migrate_database_schemas
@@ -54,6 +52,8 @@ module SUS
   	      t.string :last_name
     		end
     		ActiveRecord::Migration.add_index :people, :school_id
+        ActiveRecord::Migration.add_index :people, :first_name
+        ActiveRecord::Migration.add_index :people, :last_name
 
     		ActiveRecord::Migration.create_table :payments do |t|
           t.references :school
@@ -66,13 +66,14 @@ module SUS
     		end
         ActiveRecord::Migration.add_index :payments, :rate
         ActiveRecord::Migration.add_index :payments, :school_id
-    		ActiveRecord::Migration.add_index :payments, :course_id
+    		ActiveRecord::Migration.add_index :payments, :title_id
     		ActiveRecord::Migration.add_index :payments, :program_id
     		ActiveRecord::Migration.add_index :payments, :person_id
         ActiveRecord::Migration.add_index :payments, [:school_id, :rate]
 
         ActiveRecord::Migration.create_table :stats do |t|
           t.references :school
+          t.references :person
           t.string :title
           t.string :name
           t.float :value
